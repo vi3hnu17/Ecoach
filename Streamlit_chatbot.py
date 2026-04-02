@@ -13,8 +13,7 @@ import google.generativeai as genai
 # Page config
 # =========================================================
 st.set_page_config(
-    page_title="AI Fitness Coach",
-    page_icon="💪",
+    st.markdown("## Ecoach"),
     layout="centered",
 )
 
