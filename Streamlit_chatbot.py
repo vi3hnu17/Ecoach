@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Dict, List
 
 import streamlit as st
-from google import genai
+import google.generativeai as genai
 
 
 # =========================================================
