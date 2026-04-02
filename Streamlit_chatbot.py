@@ -13,10 +13,12 @@ import google.generativeai as genai
 # Page config
 # =========================================================
 st.set_page_config(
-    st.markdown("## Ecoach"),
+    page_title="Ecoach",
+    page_icon=None,
     layout="centered",
 )
 
+st.markdown("## Ecoach")
 
 # =========================================================
 # Paths / storage setup
