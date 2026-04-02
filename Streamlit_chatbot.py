@@ -1,6 +1,5 @@
 import os
 import csv
-import json
 import sqlite3
 from datetime import datetime
 from pathlib import Path
@@ -31,7 +30,7 @@ CSV_PATH = DATA_DIR / "study_chat_export.csv"
 
 
 # =========================================================
-# API key / Gemini client
+# API key / Gemini setup
 # =========================================================
 def load_api_key() -> str | None:
     api_key = os.getenv("GEMINI_API_KEY")
@@ -46,7 +45,11 @@ def load_api_key() -> str | None:
 
 
 api_key = load_api_key()
-client = genai.Client(api_key=api_key) if api_key else None
+
+if api_key:
+    genai.configure(api_key=api_key)
+
+model = genai.GenerativeModel("gemini-1.5-flash") if api_key else None
 
 
 # =========================================================
@@ -93,9 +96,6 @@ def init_session_state() -> None:
     if "user_id" not in st.session_state:
         st.session_state.user_id = ""
 
-    # Hidden internal modes
-    # ◌ = generic
-    # ✦ = adaptive
     if "mode_symbol" not in st.session_state:
         st.session_state.mode_symbol = "◌"
 
@@ -231,9 +231,6 @@ Behavior rules:
 """.strip()
 
 
-# =========================================================
-# Chat history formatter
-# =========================================================
 def format_chat_history(chat_history: List[Dict]) -> str:
     if not chat_history:
         return "No previous conversation."
@@ -251,10 +248,10 @@ def format_chat_history(chat_history: List[Dict]) -> str:
 # Gemini response
 # =========================================================
 def generate_response(user_message: str, mode: str, user_id: str, chat_history: List[Dict]) -> str:
-    if client is None:
+    if model is None:
         return (
             "GEMINI_API_KEY is missing. Add it as an environment variable "
-            "or in .streamlit/secrets.toml."
+            "or in Streamlit secrets."
         )
 
     system_prompt = (
@@ -276,10 +273,7 @@ Assistant:
 """.strip()
 
     try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt,
-        )
+        response = model.generate_content(prompt)
         return response.text if getattr(response, "text", None) else "I could not generate a response."
     except Exception as e:
         return f"Gemini API error: {e}"
@@ -377,7 +371,7 @@ with st.sidebar:
 st.title("💪 AI Fitness Coach")
 st.caption("Chatbot with hidden dual-mode behavior, squat motivation, conversation memory, and study logging.")
 
-if client is None:
+if model is None:
     st.warning("Set GEMINI_API_KEY in your environment or Streamlit secrets to enable responses.")
 
 mode = resolve_mode(st.session_state.mode_symbol)
