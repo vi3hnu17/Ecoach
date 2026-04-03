@@ -1,0 +1,7 @@
+.streamlit/
+study_data/
+*.db
+*.csv
+*.json
+__pycache__/
+.env
