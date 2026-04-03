@@ -49,7 +49,7 @@ api_key = load_api_key()
 if api_key:
     genai.configure(api_key=api_key)
 
-model = genai.GenerativeModel("gemini-1.5-flash-latest") if api_key else None
+model = genai.GenerativeModel("gemini-2.5-pro") if api_key else None
 
 
 # =========================================================
