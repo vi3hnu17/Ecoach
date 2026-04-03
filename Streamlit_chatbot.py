@@ -14,7 +14,6 @@ import google.generativeai as genai
 # =========================================================
 st.set_page_config(
     page_title="Ecoach",
-    page_icon=None,
     layout="centered",
 )
 
@@ -369,8 +368,8 @@ with st.sidebar:
 # =========================================================
 # Main UI
 # =========================================================
-st.title("💪 AI Fitness Coach")
-st.caption("Chatbot with hidden dual-mode behavior, squat motivation, conversation memory, and study logging.")
+st.title("Ecoach")
+st.caption("")
 
 if model is None:
     st.warning("Set GEMINI_API_KEY in your environment or Streamlit secrets to enable responses.")
